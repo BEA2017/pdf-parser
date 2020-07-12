@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.TreeSet;
 
 
 public class Main {
@@ -27,7 +29,7 @@ public class Main {
 		String queries=scanner.nextLine();
 		List<String> queryList=StringHandler.getListFromString(queries, ",");
 			
-		Map<String, List<Integer>> cardsMap=parser.getAllCardsContaining(queryList);
+		Map<String, Set<Integer>> cardsMap=parser.getAllCardsContaining(queryList);
 			
 		List<Integer> result=CollectionsHandler.getIntersection(cardsMap);
 		
@@ -36,9 +38,9 @@ public class Main {
 		
 	}
 	
-	public Map<String, List<Integer>> getAllCardsContaining(List<String> queryList){
+	public Map<String, Set<Integer>> getAllCardsContaining(List<String> queryList){
 
-		Map<String, List<Integer>> queryResult=new HashMap<String, List<Integer>>();
+		Map<String, Set<Integer>> queryResult=new HashMap<String, Set<Integer>>();
 		
 		int numPages=handler.getNumPages();
 		
@@ -51,12 +53,11 @@ public class Main {
 				
 				if(CardHandler.contains(query, pageText)) {
 					Integer cardNum=CardHandler.getCardNumber(pageText);
-					List<Integer> resultsMatchingConcreteQuery=queryResult.get(query);
+					Set<Integer> resultsMatchingConcreteQuery=queryResult.get(query);
 					if(resultsMatchingConcreteQuery==null) {
-						resultsMatchingConcreteQuery=new ArrayList<Integer>();
+						resultsMatchingConcreteQuery=new TreeSet<Integer>();
 					}
 					resultsMatchingConcreteQuery.add(cardNum);
-					resultsMatchingConcreteQuery.sort(null);
 					queryResult.put(query, resultsMatchingConcreteQuery);
 						
 				}

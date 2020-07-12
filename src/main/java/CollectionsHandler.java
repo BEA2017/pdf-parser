@@ -4,25 +4,28 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 public class CollectionsHandler {
 
-	public static List<Integer> getIntersection(Map<String, List<Integer>> map){
+	public static List<Integer> getIntersection(Map<String, Set<Integer>> map){
 		List<Integer> result=new ArrayList<Integer>();
-		Map.Entry<String, List<Integer>> shortestListEntry=getShortestList(map);
+		Map.Entry<String, Set<Integer>> shortestSetEntry=getShortestSet(map);
 		
-		List<Integer> minList=map.get(shortestListEntry.getKey());
-		map.remove(shortestListEntry.getKey());
+		Set<Integer> minSet=map.get(shortestSetEntry.getKey());
+		map.remove(shortestSetEntry.getKey());
 		
-		Collection<List<Integer>> listsToIntersect=map.values();
+		Collection<Set<Integer>> setsToIntersect=map.values();
+		Iterator<Integer> setIterator=minSet.iterator();
 		
-		for(int i=0;i<minList.size();i++) {
-			Integer value=minList.get(i);
+		while(setIterator.hasNext()) {
+			
+			Integer value=setIterator.next();
 			result.add(value);
-			Iterator<List<Integer>> iterator=listsToIntersect.iterator();
+			Iterator<Set<Integer>> iterator=setsToIntersect.iterator();
 			while(iterator.hasNext()) {
-				List<Integer> concreteList=iterator.next();
-				if(!concreteList.contains(value)) {
+				Set<Integer> concreteSet=iterator.next();
+				if(!concreteSet.contains(value)) {
 					result.remove(value);
 					break;
 				}
@@ -34,20 +37,20 @@ public class CollectionsHandler {
 		
 	}
 	
-	public static Map.Entry<String, List<Integer>> getShortestList(Map<String, List<Integer>> map) {
-		Iterator<Entry<String, List<Integer>>> iterator=map.entrySet().iterator();
-		Map.Entry<String, List<Integer>> shortestListEntry=null;
+	public static Map.Entry<String, Set<Integer>> getShortestSet(Map<String, Set<Integer>> map) {
+		Iterator<Entry<String, Set<Integer>>> iterator=map.entrySet().iterator();
+		Map.Entry<String, Set<Integer>> shortestSetEntry=null;
 		int minLength=Integer.MAX_VALUE;
 		
 		while(iterator.hasNext()) {
-			Map.Entry<String, List<Integer>> entry=(Map.Entry<String, List<Integer>>)iterator.next();
+			Map.Entry<String, Set<Integer>> entry=(Map.Entry<String, Set<Integer>>)iterator.next();
 			int length=entry.getValue().size();
 			if(length<minLength) {
 				minLength=length;
-				shortestListEntry=entry;
+				shortestSetEntry=entry;
 			}
 		}
-		return shortestListEntry;
+		return shortestSetEntry;
 	}
 	
 }
